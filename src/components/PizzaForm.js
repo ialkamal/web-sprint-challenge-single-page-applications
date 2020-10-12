@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link, Route } from "react-router-dom";
 import axios from "axios";
 import * as yup from "yup";
 import styled from "styled-components";
+import "./PizzaForm.css";
+import Success from "./Success";
 
 const PizzaH3 = styled.h3`
   text-align: center;
@@ -45,7 +48,11 @@ const PizzaNiceForm = styled.form`
     margin-top: 10px;
   }
 
-  button {
+  a {
+    margin: 0 auto;
+  }
+
+  .Order__Button {
     padding: 10px;
     margin: 10px auto;
     background: white;
@@ -86,6 +93,7 @@ const PizzaForm = () => {
     sausage: false,
     dicedTomatoes: false,
     blackOlives: false,
+    glutenFree: false,
     special: "",
   };
 
@@ -96,6 +104,7 @@ const PizzaForm = () => {
     pepperoni: yup.boolean(),
     dicedTomatoes: yup.boolean(),
     blackOlives: yup.boolean(),
+    glutenFree: yup.boolean(),
     special: yup.string(),
   });
 
@@ -110,6 +119,7 @@ const PizzaForm = () => {
     dicedTomatoes: "",
     blackOlives: "",
     pizzaSize: "",
+    glutenFree: "",
     special: "",
   });
 
@@ -282,7 +292,21 @@ const PizzaForm = () => {
             {errors.blackOlives}
           </p>
         </div>
-
+        <label className="switch">
+          <input
+            type="checkbox"
+            name="glutenFree"
+            checked={order.glutenFree}
+            value={order.glutenFree}
+            data-cy="glutenFree"
+            onChange={handleChange}
+          />
+          <span className="slider"></span>
+        </label>
+        <p style={{ textAlign: "left", margin: "0 0 0 30px" }}>
+          Gluten Free Crust (+ $1.00)
+        </p>
+        <p style={{ color: "red", fontSize: ".8rem" }}>{errors.glutenFree}</p>
         <label htmlFor="special">
           Special Instructions:
           <textarea
@@ -296,6 +320,7 @@ const PizzaForm = () => {
           />
         </label>
         <p style={{ color: "red", fontSize: ".8rem" }}>{errors.special}</p>
+        {/* <Link to="/success"> */}
         <button
           type="submit"
           name="submit"
@@ -305,6 +330,7 @@ const PizzaForm = () => {
         >
           Order
         </button>
+        {/* </Link> */}
       </PizzaNiceForm>
       <PizzaH3>List of Orders</PizzaH3>
       {orders.map((myOrder) => {
@@ -323,6 +349,7 @@ const PizzaForm = () => {
             </p>
 
             <p>Black Olives: {myOrder.blackOlives === true ? "Yes" : "No"}</p>
+            <p>Gluten Free: {myOrder.glutenFree === true ? "Yes" : "No"}</p>
             <p>Special Instructions: {myOrder.special}</p>
 
             <button
